@@ -1,8 +1,6 @@
 package com.dit.group2.gui;
 
 import java.awt.Font;
-import java.awt.event.ComponentEvent;
-import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -15,7 +13,6 @@ import javax.swing.event.ListSelectionListener;
 import com.dit.group2.order.Order;
 import com.dit.group2.person.Customer;
 import com.dit.group2.retailSystem.RetailSystemDriver;
-import com.dit.group2.stock.Product;
 import com.dit.group2.stock.StockItem;
 
 

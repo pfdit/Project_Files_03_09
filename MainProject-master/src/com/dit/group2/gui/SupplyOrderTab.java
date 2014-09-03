@@ -13,16 +13,12 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Vector;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -31,79 +27,62 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import com.dit.group2.order.Order;
-import com.dit.group2.order.OrderDB;
 import com.dit.group2.person.Person;
-import com.dit.group2.person.PersonDB;
 import com.dit.group2.person.Staff;
 import com.dit.group2.person.Supplier;
 import com.dit.group2.retailSystem.RetailSystemDriver;
 import com.dit.group2.stock.Product;
-import com.dit.group2.stock.StockDB;
 import com.dit.group2.stock.StockItem;
 
 
 
-
+@SuppressWarnings("serial")
 public class SupplyOrderTab extends GuiLayout implements ActionListener, ItemListener, ListSelectionListener{
 	
 	private RetailSystemDriver driver;
 	private ArrayList<StockItem> orderStockItemList;
-	private ArrayList<ArrayList<Product>> productList;
 	private Staff currentlyLoggedInStaff;
 	private NumberFormat formatter = new DecimalFormat("#0.00");
-	protected Vector<String> comboBoxItems = new Vector<String>();	
-	protected ArrayList<Integer> itemsQuantity = new ArrayList<Integer>();
-	protected ArrayList<Double> itemsPrice = new ArrayList<Double>();
-	protected DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<String>(comboBoxItems);
-	protected JComboBox<String> productComboBox = new JComboBox<String>(comboBoxModel);
-	
-	protected Vector<String> supplierComboBoxItems = new Vector<String>();
-	protected DefaultComboBoxModel<String> supplierComboBoxModel = new DefaultComboBoxModel<String>(supplierComboBoxItems);
-	protected JComboBox<String> supplierComboBox = new JComboBox<String>(supplierComboBoxModel);
-	
-	
-	protected DefaultListModel<String> listModel = new DefaultListModel<String>();
-	protected JList<String> orderingList = new JList<String>(listModel); 
-	protected JScrollPane orderingListSroll = new JScrollPane(orderingList);
+	private Vector<String> comboBoxItems = new Vector<String>();	
+	private ArrayList<Integer> itemsQuantity = new ArrayList<Integer>();
+	private ArrayList<Double> itemsPrice = new ArrayList<Double>();
+	private DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<String>(comboBoxItems);
+	private JComboBox<String> productComboBox = new JComboBox<String>(comboBoxModel);
+	private Vector<String> supplierComboBoxItems = new Vector<String>();
+	private DefaultComboBoxModel<String> supplierComboBoxModel = new DefaultComboBoxModel<String>(supplierComboBoxItems);
+	private JComboBox<String> supplierComboBox = new JComboBox<String>(supplierComboBoxModel);
+	private DefaultListModel<String> listModel = new DefaultListModel<String>();
+	private JList<String> orderingList = new JList<String>(listModel); 
+	private JScrollPane orderingListSroll = new JScrollPane(orderingList);
 	private JScrollBar scrollBar = orderingListSroll.getVerticalScrollBar();
-	
-	protected ArrayList<Product> currentOrderList = new ArrayList<Product>();
-	protected ArrayList<Integer> currentOrderListQuantity = new ArrayList<Integer>();
-	protected ArrayList<Integer> currentOrderComboIndex = new ArrayList<Integer>();
-	
-	protected JLabel productComboBoxLabel, quantityLabel, availableQuantityLabel, availableQuantityField,
+	private ArrayList<Product> currentOrderList = new ArrayList<Product>();
+	private ArrayList<Integer> currentOrderListQuantity = new ArrayList<Integer>();
+	private ArrayList<Integer> currentOrderComboIndex = new ArrayList<Integer>();
+	private JLabel productComboBoxLabel, quantityLabel, availableQuantityLabel, availableQuantityField,
 					priceLabel, priceField, grandTotalLabel, grandTotalField,
 					orderListProductLabel, orderListQtyLabel, orderListPriceLabel, orderListTotalPriceLabel,
 					supplierComboBoxLabel,
 					supplierIDLabel, supplierIDField;
-	protected JTextField quantityTextField;
-	protected JButton addButton, removeButton, processButton,cancelButton;
-	protected double grandTotal = 0;
+	private JTextField quantityTextField;
+	private JButton addButton, removeButton, processButton,cancelButton;
+	private double grandTotal = 0;
 	
 	private TabListCellRenderer renderer = new TabListCellRenderer(false);
 	//source for this class:
 	//http://www.grandt.com/sbe/files/uts2/Chapter10html/Chapter10.htm
-	  
-	
-	private boolean selected;
-	  
-	
+
 	public SupplyOrderTab(Staff currentlyLoggedInStaff, RetailSystemDriver driver){
 		
 		this.currentlyLoggedInStaff = currentlyLoggedInStaff;
 		this.driver = driver;
 			
 		titleLabel.setText("Supply Order Form");
-		selected = false;
 		outerPanel.setBorder(BorderFactory.createLineBorder(new Color(176, 168, 168),8,true));
 		this.setBorder(BorderFactory.createLineBorder(new Color(176, 168, 168),4));
 		add(outerPanel, new GridBagConstraints());
@@ -111,7 +90,6 @@ public class SupplyOrderTab extends GuiLayout implements ActionListener, ItemLis
 		
 		setUpSupplierComboBox();		
 		setUpProductComboBox();
-		
 		setUpSupplierNameField();
 		setUpQuantityTextField();
 		setUpAvailableQuantity();
@@ -139,7 +117,6 @@ public class SupplyOrderTab extends GuiLayout implements ActionListener, ItemLis
 		supplierComboBox.addItemListener(this);
 	}
 	
-	
 	//add product combo box
 	private void setUpProductComboBox(){
 		productComboBoxLabel = new JLabel("Products");
@@ -150,7 +127,6 @@ public class SupplyOrderTab extends GuiLayout implements ActionListener, ItemLis
 		fillUpProductComboBox();
 		productComboBox.addItemListener(this);
 	}
-	
 	
 	//add customer name field
 	private void setUpSupplierNameField(){
@@ -602,8 +578,4 @@ public class SupplyOrderTab extends GuiLayout implements ActionListener, ItemLis
 		s += "\t" + text2 + "\t" + text3 + "\t" + text4;		
 		return s;
 	}
-	
-	
-
-	
 }

@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Properties;
-
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -22,23 +20,19 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
-
-import com.dit.group2.order.OrderDB;
 import com.dit.group2.person.Staff;
-import com.dit.group2.retailSystem.Login;
 import com.dit.group2.retailSystem.RetailSystemDriver;
-import com.dit.group2.stock.StockDB;
-import com.jtattoo.plaf.smart.SmartLookAndFeel;
 
 
+@SuppressWarnings("serial")
 public class MainGUI extends JFrame implements ActionListener {
 
 	private RetailSystemDriver driver;
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
+	private JTabbedPane customerOrderTabbedPane;
+	private JTabbedPane supplyOrderTabbedPane;
 	private CustomerOrderHistoryTab customerOrderHistorytab;
 	private SupplyOrderHistoryTab supplyOrderHistorytab;
 	private SupplyOrderTab supplyOrderTab;
@@ -125,11 +119,19 @@ public class MainGUI extends JFrame implements ActionListener {
 		howToMenuItem.addActionListener(this);
 
 		// Set up a tabbed pane system
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		tabbedPane.setBackground(SystemColor.window);
 		tabbedPane.setBounds(xPosition,yPosition, xSize, ySize);
 		contentPane.add(tabbedPane);
 
+		customerOrderTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		customerOrderTabbedPane.setBackground(SystemColor.window);
+		customerOrderTabbedPane.setBounds(xPosition,yPosition, xSize-50, ySize-40);
+		
+		supplyOrderTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		supplyOrderTabbedPane.setBackground(SystemColor.window);
+		supplyOrderTabbedPane.setBounds(xPosition,yPosition, xSize-50, ySize-40);
+		
 		// Set up the tabs, passing in the relevant data structures
 		supplierTab = new SupplierTab(driver);
 		staffTab = new StaffTab(driver);
@@ -140,18 +142,22 @@ public class MainGUI extends JFrame implements ActionListener {
 		customerOrderHistorytab = new CustomerOrderHistoryTab(driver);
 		supplyOrderHistorytab = new SupplyOrderHistoryTab(driver);		
 		supplyOrderTab = new SupplyOrderTab(currentlyLoggedInStaff, driver);
-
+	
 		// Add the tabs to the pane
 		tabbedPane.addTab("Customer", new ImageIcon("Images/CustomerIcon.jpg"), customerTab, "Select this tab to perform operations on customers.");
 		tabbedPane.addTab("Supplier", new ImageIcon("Images/SupplierIcon.jpg"), supplierTab, "Select this tab to perform operations on suppliers.");
 		tabbedPane.addTab("Staff", new ImageIcon("Images/StaffIcon.jpg"), staffTab, "Select this tab to perform operations on staff.");
 		tabbedPane.addTab("Product", new ImageIcon("Images/ProductIcon.jpg"), productTab, "Select this tab to perform operations on products.");
-		tabbedPane.addTab("Supply Order", null, supplyOrderTab, null);
+		
 		tabbedPane.addTab("Customer Order", new ImageIcon("Images/CustomerOrderIcon.jpg"),customerOrderTab, "Select this tab to perform operations on customer orders.");
 		tabbedPane.addTab("Stock Control", new ImageIcon("Images/StockControlIcon.jpg"),stockControlTab, "Select this tab to show stock list.");
-		tabbedPane.addTab("Customer Order History", null, customerOrderHistorytab, "Select this tab to show customer order history.");
-		tabbedPane.addTab("Supply Order History", null, supplyOrderHistorytab, "Select this tab to show supply order history.");	
-		
+		supplyOrderTabbedPane.addTab("Supply Order",null,supplyOrderTab,null);
+		supplyOrderTabbedPane.addTab("Supply Order History",null,supplyOrderHistorytab,null);
+		customerOrderTabbedPane.addTab("Customer Order", null, customerOrderTab, "Select this tab to show customer order.");
+		customerOrderTabbedPane.addTab("Customer Order History", null, customerOrderHistorytab, "Select this tab to show customer order history.");
+		tabbedPane.addTab("Customer Order", null,customerOrderTabbedPane , null);
+		tabbedPane.addTab("Supply Order", null, supplyOrderTabbedPane, null);
+
 		setVisible(true);
 	}
 

@@ -1,39 +1,27 @@
 package com.dit.group2.gui;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Vector;
-
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-
 import com.dit.group2.person.Person;
-import com.dit.group2.person.PersonDB;
 import com.dit.group2.person.Supplier;
 import com.dit.group2.retailSystem.RetailSystemDriver;
 import com.dit.group2.stock.Product;
-import com.dit.group2.stock.StockDB;
 import com.dit.group2.stock.StockItem;
 
 
+@SuppressWarnings("serial")
 public class ProductTab extends GuiLayout implements ActionListener, ItemListener{
 
 	private RetailSystemDriver driver;
@@ -70,8 +58,6 @@ public class ProductTab extends GuiLayout implements ActionListener, ItemListene
 		super();
 		this.driver = driver;
 	
-		
-		
 		titleLabel.setText("Product Form");
 		
 		valid = false;
@@ -178,9 +164,7 @@ public class ProductTab extends GuiLayout implements ActionListener, ItemListene
 		mainPanel.add(supplierPriceField);
 		mainPanel.add(retailPriceField);
 		mainPanel.add(supplierField);
-		mainPanel.add(nameField);
-		
-		
+		mainPanel.add(nameField);	
 		mainPanel.add(newProductButton);
 		mainPanel.add(deleteProductButton);
 		mainPanel.add(submitButton);
@@ -192,8 +176,7 @@ public class ProductTab extends GuiLayout implements ActionListener, ItemListene
 		mainPanel.add(supplierComboBox);
 		mainPanel.add(nameField);
 		mainPanel.add(supplierLabel);
-		mainPanel.add(retailPriceLabel);
-		
+		mainPanel.add(retailPriceLabel);	
 		mainPanel.add(scrollPane);
 		mainPanel.add(descriptionLabel);
 		mainPanel.add(idLabel);
@@ -202,10 +185,7 @@ public class ProductTab extends GuiLayout implements ActionListener, ItemListene
 		mainPanel.add(supplierPriceLabel);
 		mainPanel.add(profitMarginLabel);
 		mainPanel.add(categoryLabel);
-		
 		add(titleLabel);
-		
-		//this.add(mainPanel, new GridBagConstraints());
 	}
 
 	public void enableButtons(boolean enabled) {
@@ -293,7 +273,6 @@ public class ProductTab extends GuiLayout implements ActionListener, ItemListene
 		supplierComboboxItems.add(item);
 		for (Person person : list) {
 			item ="\t"+ person.getId()+" \t - \t "+person.getName();
-			//item = person.getName();
 			supplierComboboxItems.add(item);
 		}
 		supplierComboBox.setSelectedIndex(driver.getPersonDB().getSupplierList().size());
@@ -623,8 +602,6 @@ public class ProductTab extends GuiLayout implements ActionListener, ItemListene
 		revalidate();
 		repaint();
 	}
-
-	
 	
 	/**
 	 * @return the newSupplierProductButton

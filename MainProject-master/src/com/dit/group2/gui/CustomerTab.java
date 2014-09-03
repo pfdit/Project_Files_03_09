@@ -1,7 +1,6 @@
 package com.dit.group2.gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -14,17 +13,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
 
 import com.dit.group2.order.Order;
-import com.dit.group2.person.Customer;
 import com.dit.group2.person.Person;
 import com.dit.group2.retailSystem.RetailSystemDriver;
-import com.dit.group2.stock.StockDB;
 import com.dit.group2.stock.StockItem;
-
-
 
 @SuppressWarnings("serial")
 public class CustomerTab extends PersonTab implements MouseListener{

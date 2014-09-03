@@ -1,40 +1,30 @@
 package com.dit.group2.gui;
 
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Vector;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-
 import com.dit.group2.person.Person;
 import com.dit.group2.retailSystem.RetailSystemDriver;
-
 
 @SuppressWarnings("serial")
 public class PersonTab extends GuiLayout implements ActionListener, ItemListener, MouseListener{
 	
 	protected RetailSystemDriver driver;
-	
 	protected boolean editMode;
 	protected boolean valid;
 	protected int submitButtonMode;
@@ -50,7 +40,7 @@ public class PersonTab extends GuiLayout implements ActionListener, ItemListener
 	protected JComboBox<String> comboBox;
 	protected DefaultComboBoxModel<String> comboboxModel;
 
-	
+
 	//private final boolean PRIVILEDGED_ACCESS = RetailSystemDriver.isPriviledged(); 
 
 	public PersonTab(RetailSystemDriver driver) {

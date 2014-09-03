@@ -1,26 +1,17 @@
 package com.dit.group2.gui;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.Vector;
-
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import com.dit.group2.order.Order;
-import com.dit.group2.order.OrderDB;
 import com.dit.group2.person.Customer;
 import com.dit.group2.person.Supplier;
 import com.dit.group2.retailSystem.RetailSystemDriver;
@@ -28,33 +19,23 @@ import com.dit.group2.stock.Product;
 import com.dit.group2.stock.StockItem;
 
 
+@SuppressWarnings("serial")
 public class SupplyOrderHistoryTab extends GuiLayout implements ListSelectionListener{
 
 	private RetailSystemDriver driver;
-	protected boolean emptiedList;
+	private boolean emptiedList;
 	private JScrollPane scrollPane;
-	
-	protected JLabel idLabel;
-	protected JLabel customerLabel;
-	protected JLabel dateLabel;
-	protected JLabel staffLabel;
-	
-	private OrderDB orderDB;
-	protected Vector<String> comboboxItems;
-	protected Product product;
-	protected String name;
-	
-	protected DefaultListModel<String> listModel = new DefaultListModel<String>();
-	protected JList<String> orderList = new JList<String>(listModel); 
-	protected JScrollPane listSroll = new JScrollPane(orderList);
-	
+	private JLabel idLabel;
+	private JLabel customerLabel;
+	private JLabel dateLabel;
+	private JLabel staffLabel;
+	private JTextArea textArea;
+	private DefaultListModel<String> listModel = new DefaultListModel<String>();
+	private JList<String> orderList = new JList<String>(listModel); 
+	private JScrollPane listSroll = new JScrollPane(orderList);
 	private TabListCellRenderer renderer = new TabListCellRenderer(true);
 	//source for this class:
 	//http://www.grandt.com/sbe/files/uts2/Chapter10html/Chapter10.htm
-	
-	protected JTextArea textArea;
-	
-
 	
 	public SupplyOrderHistoryTab(RetailSystemDriver driver){
 		super();
@@ -65,8 +46,6 @@ public class SupplyOrderHistoryTab extends GuiLayout implements ListSelectionLis
 		textArea = new JTextArea();
 		scrollPane = new JScrollPane(textArea);
 
-		
-		
 		idLabel = new JLabel("Order ID");
 		dateLabel  = new JLabel("Date");
 		customerLabel  = new JLabel("Customer ID");
@@ -82,7 +61,6 @@ public class SupplyOrderHistoryTab extends GuiLayout implements ListSelectionLis
 		staffLabel.setFont(new Font("Arial", Font.BOLD, 20));
 		dateLabel.setFont(new Font("Arial", Font.BOLD, 20));
 		
-		
 		orderList.addListSelectionListener(this);
 		listSroll.setBounds(10, 30, 510, 310);					
 		mainPanel.add(idLabel);
@@ -97,14 +75,12 @@ public class SupplyOrderHistoryTab extends GuiLayout implements ListSelectionLis
 		setLayout(null);
 		setVisible(true);	
 		
-		showCustomerOrders();
+		showSupplyOrders();
 		setOrderList();
 		
 	}
 	
-	
 	public void setOrderList(){
-		
 		int index = 0;
 		listModel.clear();
 		for(Order order : driver.getOrderDB().getSupplyOrderList()){
@@ -134,30 +110,28 @@ public class SupplyOrderHistoryTab extends GuiLayout implements ListSelectionLis
 		orderDetailsMessage+="\n     Phone: \t"+order.getPerson().getContactNumber();
 		orderDetailsMessage+="\n     Address: \t"+order.getPerson().getAddress();
 		orderDetailsMessage+="\n     Contact Name: \t"+((Supplier)order.getPerson()).getContactName();
-		
 		orderDetailsMessage+="\n\nThe total order value is \t\u20ac"+order.getGrandTotalOfOrder()+"\n";
 		
-		JOptionPane.showMessageDialog(null, orderDetailsMessage,  "ORDER ID: "+ (order.getId())+"    STAFF ID: "+order.getCurrentlyLoggedInStaff().getId()  , JOptionPane.PLAIN_MESSAGE);
-	}
-	
-	
-	public void showCustomerOrders(){
-		textArea.setText("");
-		for(int i=0;i<driver.getOrderDB().getCustomerOrderList().size();i++){
-			Order order = (driver.getOrderDB().getCustomerOrderList().get(i));
-			textArea.append("Order "+order.getId()+" was created by "+order.getCurrentlyLoggedInStaff().getName()+"\nCustomer ID : "+((Customer)order.getPerson()).getId()+"\nItems in this order :");
-			for(int j=0;j<order.getOrderEntryList().size();j++){
-				StockItem stockItem = order.getOrderEntryList().get(j);
-				textArea.append("\n  "+stockItem.getQuantity()+"  "+stockItem.getProduct().getProductName()+"  "+(stockItem.getProduct().getRetailPrice()*stockItem.getQuantity()));
-			}
-			textArea.append("\nThe total order value is "+order.getGrandTotalOfOrder()+"\n\n\n");
+		Object[] options = {"OK",
+        "Set Processed"};
+		int n = JOptionPane.showOptionDialog(null,
+		orderDetailsMessage,
+		 "ORDER ID: "+ (order.getId())+"    STAFF ID: "+order.getCurrentlyLoggedInStaff().getId()+" STATUS : "+order.isStatus(),
+		JOptionPane.YES_NO_OPTION,
+		JOptionPane.PLAIN_MESSAGE,
+		null,
+		options,
+		options[0]);
+		System.out.println(n);
+		if(n==1){
+			order.setStatus(true);
 		}
 	}
 	
 	private void showSupplyOrders(){
 		for(int i=0;i<driver.getOrderDB().getSupplyOrderList().size();i++){
 			Order order = (driver.getOrderDB().getSupplyOrderList().get(i));
-			textArea.append("Order "+order.getId()+" was created by "+order.getCurrentlyLoggedInStaff().getName()+"\nCustomer ID : "+((Customer)order.getPerson()).getId()+"\nItems in this order :");
+			textArea.append("Order "+order.getId()+" was created by "+order.getCurrentlyLoggedInStaff().getName()+"\nSupplier ID : "+((Supplier)order.getPerson()).getId()+"\nItems in this order :");
 			for(int j=0;j<order.getOrderEntryList().size();j++){
 				StockItem stockItem = order.getOrderEntryList().get(j);
 				textArea.append("\n  "+stockItem.getQuantity()+"  "+stockItem.getProduct().getProductName()+"  "+(stockItem.getProduct().getRetailPrice()*stockItem.getQuantity()));
@@ -166,53 +140,16 @@ public class SupplyOrderHistoryTab extends GuiLayout implements ListSelectionLis
 		}
 	}
 	
-	public void componentResized(ComponentEvent e) {
-		
-		xPosition = ((((int) mainPanel.getParent().getSize().getWidth())-xSize)/2);
-		yPosition = ((((int) mainPanel.getParent().getSize().getHeight())-ySize)/2);
-		mainPanel.setBounds(xPosition, yPosition, xSize, ySize);
-		
-		xPosition = ((((int) outerPanel.getParent().getSize().getWidth())-xSize)/2);
-		yPosition = ((((int) outerPanel.getParent().getSize().getHeight())-ySize)/2)+40;
-		outerPanel.setBounds(xPosition-50, yPosition-40, xSize+100, ySize+80);
-		titleLabel.setBounds((xPosition-50)+(xSize+100-titleLabel.getWidth())/2, yPosition-90, 400, 60);
-		
-	}
-	
-	
-	@Override
-	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (e.getSource() == orderList){
 			// check if order list is empty
 			if(orderList.getSelectedIndex()>-1){
 				// separate the text in the selected list item 
-				String[] values = orderList.getSelectedValue().split("\\t");
-				//JOptionPane.showMessageDialog(null, values[1]);
-				
+				String[] values = orderList.getSelectedValue().split("\\t");			
 				showOrderDetails(driver.getOrderDB().getOrderById(Integer.parseInt(values[0].trim()), driver.getOrderDB().getSupplyOrderList()));
 			}			
 		}
 		
-	}
-	
-
-
-	
-	
+	}	
 }

@@ -16,7 +16,6 @@ import com.dit.group2.retailSystem.RetailSystemDriver;
 import com.dit.group2.stock.Product;
 import com.dit.group2.stock.StockItem;
 
-
 @SuppressWarnings("serial")
 public class StockControlTab extends GuiLayout implements ListSelectionListener{
 	

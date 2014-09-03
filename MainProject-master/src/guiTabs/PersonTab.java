@@ -171,7 +171,6 @@ public class PersonTab extends JPanel implements ActionListener, ItemListener, C
 					break;
 				index++;
 			}
-			
 			return index;
 		}
 		return -1;
@@ -339,7 +338,8 @@ public class PersonTab extends JPanel implements ActionListener, ItemListener, C
 			deletePersonButton.setEnabled(false);
 			editPersonButton.setEnabled(false);
 			cancelButton.setVisible(true);
-			submitButtonMode = 1;	
+			if(submitButtonMode!=3)
+				submitButtonMode = 1;	
 			comboBox.setEnabled(false);
 			if(emptiedList){
 				idNumberLabel.setText(""+Person.getUniqueId());

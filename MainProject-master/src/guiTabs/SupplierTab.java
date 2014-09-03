@@ -224,8 +224,9 @@ public class SupplierTab extends PersonTab implements MouseListener{
 				editMode = false;
 				personDetailsForm();
 				if(valid){
-				//	tabbedPane.setSelectedComponent(gui.getProductTab());
-					//gui.getProductTab().addItemsToSupplierCombobox(personDB.getSupplierList());
+					JOptionPane.showMessageDialog(null, valid);
+					tabbedPane.setSelectedComponent(gui.getProductTab());
+					gui.getProductTab().addItemsToSupplierCombobox(personDB.getSupplierList());
 				}
 			}
 			else if(submitButtonMode == 2){
@@ -237,6 +238,7 @@ public class SupplierTab extends PersonTab implements MouseListener{
 				editMode = false;
 				personDetailsForm();
 			}
+			automaticItemSelection = true;
 			comboBox.setEnabled(true);
 		}
 		
@@ -248,6 +250,7 @@ public class SupplierTab extends PersonTab implements MouseListener{
 		if(e.getSource()==newPersonButton){	
 			clearTextFields(personDB.getSupplierList());
 			super.actionPerformed(e);
+			productsComboBox.setSelectedItem(null);
 			productsComboBox.setEnabled(false);
 			setFieldEditable(true);	
 			automaticItemSelection = true;
@@ -276,11 +279,11 @@ public class SupplierTab extends PersonTab implements MouseListener{
 		}
 		
 		if(e.getSource()==newSupplierButton){
-			newPersonButton.doClick();
 			submitButtonMode = 3;
+			newPersonButton.doClick();
 		}
 		
-		
+		automaticItemSelection = false;
 		revalidate();
   		repaint();
 	}
@@ -304,15 +307,16 @@ public class SupplierTab extends PersonTab implements MouseListener{
 				if (productsComboBox.getItemAt(
 						(productsComboBox.getSelectedIndex())).equals(
 								"<html><font color='red'>Add New Product</font></html>")) {
-	// unknown nullpointer exception occurs here someimes!!!!!!!!			
-					
-
-					if(!automaticItemSelection){
-						String[] values = ((String)comboBox.getSelectedItem()).split("\\t");
+	
+					String[] values = ((String)comboBox.getSelectedItem()).split("\\t");
+					Supplier supplier = (Supplier)personDB.getSupplierById(Integer.parseInt(values[1].trim()));
+					if(!automaticItemSelection&&(supplier.getProducts().size()>0)){
+						
+						
 						tabbedPane.setSelectedComponent(gui.getProductTab());
 						if(values!=null)
-							
-						gui.getProductTab().getNewSupplierProductButton(personDB.getSupplierByName(values[3].trim())).doClick();
+						gui.getProductTab().getNewSupplierProductButton(supplier).doClick();
+						
 					}
 				}
 				else if(gui.getProductTab()!=null){			
@@ -320,11 +324,9 @@ public class SupplierTab extends PersonTab implements MouseListener{
 					if(values!=null&&!automaticItemSelection){
 						tabbedPane.setSelectedComponent(gui.getProductTab());
 						gui.getProductTab().setSelectedProduct(gui.getStockDBControl().getStockItem(Integer.parseInt(values[1].trim())));
+						JOptionPane.showMessageDialog(null, "H1");
 					}
 				}
-					
-					/*supplier = personDB.getSupplierByName(supplierComboBox
-							.getItemAt(supplierComboBox.getSelectedIndex()));*/
 			}
 		
 		}

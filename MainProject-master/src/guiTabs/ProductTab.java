@@ -319,8 +319,8 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 	
 	public int getIndex(ArrayList<Person> list){
 		String[] values = null;
-		if(comboBox.getSelectedItem()!=null){
-			values = ((String)comboBox.getSelectedItem()).split("\\t");
+		if(supplierComboBox.getSelectedItem()!=null){
+			values = ((String)supplierComboBox.getSelectedItem()).split("\\t");
 			int index =0;
 			for(Person person : list){
 				if(person.getId()==Integer.parseInt(values[1].trim()))
@@ -345,7 +345,7 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 		nameField.setText(product.getProductName());
 		categoryField.setText(product.getProductCategory());
 		idNumberLabel.setText("" + product.getProductID());
-		supplierField.setText(product.getSupplier().getName());
+		supplierField.setText(product.getSupplier().getId()+"  -  "+product.getSupplier().getName());
 		descriptionField.setText(product.getProductDescription());
 		descriptionField.setCaretPosition(0);
 		supplierPriceField.setText("" + product.getSupplierPrice());
@@ -412,8 +412,10 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 			errorMessage = errorMessage
 					+ "Profit margin field cannot be empty!\n";
 		}
-		if (name != null && category != null && description != null
-				&& supplierPrice != -1 && profitMargin != -1) {
+		if (name != null && category != null && description != null&& supplierPrice != -1 && profitMargin != -1) {
+			JOptionPane.showMessageDialog(null, "1- "+supplier);
+			supplier =(Supplier) personDB.getSupplierList().get(getIndex(personDB.getSupplierList())); 
+			JOptionPane.showMessageDialog(null, "1- "+supplier);
 			if (supplier != null) {
 				valid = true;
 			}
@@ -494,6 +496,7 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 						.getStockList());
 			}
 			if (event.getItemSelectable().equals(supplierComboBox)) {
+				String[] values = ((String)supplierComboBox.getSelectedItem()).split("\\t");
 				if (supplierComboBox.getItemAt(
 						(supplierComboBox.getSelectedIndex())).equals(
 								"<html><font color='red'>Add New Supplier</font></html>")) {
@@ -501,11 +504,9 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 					supplierTab.getNewSupplierButton().doClick();
 				}
 				else
-					supplier = personDB.getSupplierByName(supplierComboBox
-							.getItemAt(supplierComboBox.getSelectedIndex()));
+					supplier = personDB.getSupplierById(Integer.parseInt(values[1].trim()));
 			}
-			revalidate();
-			repaint();
+			
 		}
 	}
 
@@ -516,8 +517,8 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 				editMode = false;
 				productDetailsForm();
 				if(valid){
-					//tabbedPane.setSelectedComponent(gui.getSupplierTab());
-					//gui.getSupplierTab().addItemsToProductCombobox();
+					tabbedPane.setSelectedComponent(gui.getSupplierTab());
+					
 				}
 			}
 			else if (submitButtonMode == 2) {
@@ -529,28 +530,32 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 				productDetailsForm();
 			}
 			comboBox.setEnabled(true);
-		}
+		
 
-		if (valid) {
-			submitButtonMode = 1;
-			setFieldEditable(false);
-			valid = false;
+			if (valid) {
+				gui.getSupplierTab().addItemsToProductCombobox();
+				submitButtonMode = 1;
+				setFieldEditable(false);
+				valid = false;
+			}
 		}
-
 		if (e.getSource() == newProductButton) {
 			addItemsToSupplierCombobox(personDB.getSupplierList());
 			if(submitButtonMode==3){
 				
 				supplierComboBox.setEnabled(false);
-				supplierComboBox.setSelectedItem("\t"+ supplier.getId()+" \t - \t "+supplier.getName());
+				System.out.println(" here "+supplier.getName());
+					supplierComboBox.setSelectedItem("\t"+ supplier.getId()+" \t - \t "+supplier.getName());
 				
-				
+				System.out.println(" here2 "+supplier.getName());
 			}
 			else{
+				System.out.println(" here4 "+supplier);
 				supplier = null;
 				supplierComboBox.setSelectedItem(supplier);
 				supplierComboBox.setEnabled(true);
 				submitButtonMode = 1;
+				System.out.println(" here5 "+supplier);
 			}
 			if (personDB.getSupplierList().size() <= 0)
 				JOptionPane
@@ -561,6 +566,7 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 			
 			//
 			clearTextFields(stockDBControl.getStockList());
+			JOptionPane.showMessageDialog(null, "here3 "+submitButtonMode);
 			submitButton.setVisible(true);
 			newProductButton.setVisible(false);
 			deleteProductButton.setEnabled(false);
@@ -627,7 +633,7 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 		}
 		
 		if(e.getSource()==newSupplierProductButton){
-			supplierComboBox.setSelectedItem("\t"+ supplier.getId()+" \t - \t "+supplier.getName());
+			//supplierComboBox.setSelectedItem("\t"+ supplier.getId()+" \t - \t "+supplier.getName());
 			submitButtonMode = 3;
 			newProductButton.doClick();
 			
@@ -644,10 +650,6 @@ public class ProductTab extends JPanel implements ActionListener, ItemListener, 
 	 */
 	public JButton getNewSupplierProductButton(Person person) {
 		supplier = (Supplier) person;
-		supplierComboBox.setSelectedItem("\t"+ supplier.getId()+" \t - \t "+supplier.getName());
-		
-		System.out.println(person.getName());
-		//supplierComboBox.setEnabled(false);
 		revalidate();
 		repaint();
 		return newSupplierProductButton;

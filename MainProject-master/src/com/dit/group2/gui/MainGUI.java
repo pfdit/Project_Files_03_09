@@ -320,4 +320,8 @@ public class MainGUI extends JFrame implements ActionListener {
 	public SupplyOrderHistoryTab getSupplyOrderHistorytab() {
 		return supplyOrderHistorytab;
 	}
+	
+	public JTabbedPane getCustomerOrderTabbedPane(){
+		return customerOrderTabbedPane;
+	}
 }

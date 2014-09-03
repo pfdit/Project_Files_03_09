@@ -49,7 +49,7 @@ public class GuiLayout extends JPanel implements ComponentListener{
 		xPosition = ((((int) outerPanel.getParent().getSize().getWidth())-xSize)/2);
 		yPosition = ((((int) outerPanel.getParent().getSize().getHeight())-ySize)/2)+40;
 		outerPanel.setBounds(xPosition-50, yPosition-40, xSize+100, ySize+80);
-		titleLabel.setBounds((xPosition-50)+(xSize+100-titleLabel.getWidth())/2, yPosition-90, 400, 60);	
+		titleLabel.setBounds((xPosition-50)+(xSize+100-titleLabel.getWidth())/2, yPosition-120, 400, 60);	
 	}
 
 	@Override

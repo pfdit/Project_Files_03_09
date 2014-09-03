@@ -159,8 +159,9 @@ public class CustomerTab extends PersonTab implements MouseListener{
 				editMode = false;
 				personDetailsForm();
 				if(valid){
+					JOptionPane.showMessageDialog(null, "hey");
 					driver.getPersonDB().getCustomerList();
-					((JTabbedPane)driver.getGui().getCustomerOrderTab().getParent()).setSelectedComponent(driver.getGui().getCustomerOrderTab());
+					driver.getGui().getTabbedPane().setSelectedComponent(driver.getGui().getCustomerOrderTabbedPane());
 					driver.getGui().getCustomerOrderTab().fillUpCustomerComboBox();
 					driver.getGui().getCustomerOrderTab().getCustomerComboBox().setSelectedIndex(driver.getPersonDB().getCustomerList().size());
 				}
@@ -210,8 +211,9 @@ public class CustomerTab extends PersonTab implements MouseListener{
 		}
 		
 		if(e.getSource()==newCustomerButton){
-			newPersonButton.doClick();
 			submitButtonMode = 3;
+			newPersonButton.doClick();
+			
 		}
 		revalidate();
   		repaint();
